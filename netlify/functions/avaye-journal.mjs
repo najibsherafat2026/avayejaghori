@@ -24,7 +24,8 @@ export default createHandler({
   },
   user:()=>getUser(),
   async login(email,password){try{await login(email,password);}catch(e){
-    if(e.status===400||e.status===401||e.status===403||e.name==='AuthError')throw new Problem(401,'ورود انجام نشد. اطلاعات حساب و فعال‌بودن آن را بررسی کنید.');
+    if(e.status===400||e.status===401)throw new Problem(401,'ورود انجام نشد. ایمیل و گذرواژه را بررسی کنید.');
+    if(e.status===403||e.name==='AuthError')throw new Problem(503,'سرویس ورود در دسترس نیست یا تنظیمات اتصال آن نیاز به بررسی دارد.');
     throw e;
   }},
   logout:()=>logout()
