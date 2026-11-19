@@ -124,6 +124,7 @@ export function SiteHeader() {
             <Logo light withSlogan={!scrolled} />
             <div className="hidden items-center gap-2 lg:flex">
               <SearchBox />
+              <a href="/journal/desk" className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-white/10">میز نشر</a>
               <AuthDialog
                 defaultTab="login"
                 trigger={<Button size="sm" variant="ghost" className="text-white hover:bg-white/10 hover:text-white"><LogIn className="size-4" />ورود</Button>}
@@ -145,6 +146,7 @@ export function SiteHeader() {
                 </SheetHeader>
                 <div className="space-y-5 p-4">
                   <SearchBox onDone={() => setOpen(false)} />
+                  <a href="/journal/desk" className="block rounded-md bg-muted px-3 py-2 text-sm">میز نشر</a>
                   <nav className="space-y-4" aria-label="منوی موبایل">
                     {groups.map((g) => (
                       <div key={g.key}>
@@ -200,7 +202,8 @@ export function SiteHeader() {
               </DropdownMenu>
             ))}
             <Link to="/articles" search={{ category: 'news' }} className={navLink}>اخبار و رویدادها</Link>
-            <Link to="/articles" search={{ category: 'articles' }} className={navLink}>مقالات و یادداشت‌ها</Link>
+            <a href="/journal" className={navLink}>مطالب منتشرشده</a>
+            <Link to="/articles" search={{ category: 'articles' }} className={navLink}>نمونه مقالات</Link>
             <Link to="/library" className={navLink} activeProps={navActive}>کتابخانه دیجیتال</Link>
             <a href="/#media" className={navLink}>چندرسانه‌ای</a>
             <Link to="/about" className={navLink} activeProps={navActive}>درباره ما</Link>

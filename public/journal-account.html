@@ -1,0 +1,24 @@
+<!doctype html><html lang="fa-AF" dir="rtl"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1"><title>حساب آوای جاغوری</title><style>body{background:#faf8f1;color:#193936;font:1.1rem/1.8 Tahoma,sans-serif;max-width:34rem;margin:8vh auto;padding:1.2rem}input,button{padding:.55rem;font:inherit}label{display:block}button{background:#125553;color:white;border:0;margin:1rem 0}</style></head><body><h1>حساب آوای جاغوری</h1><p id="msg" role="status"></p><form id="form" hidden><label for="pw">گذرواژهٔ جدید</label><input id="pw" type="password" minlength="10" maxlength="120" autocomplete="new-password" required><button>ثبت گذرواژه</button></form><a href="/journal/login">ورود به میز نشر</a>
+<script type="module">
+const tokens=new URLSearchParams(location.hash.slice(1));
+const invite=tokens.get('invite_token'),recovery=tokens.get('recovery_token'),confirm=tokens.get('confirmation_token');
+history.replaceState(null,'',location.pathname);
+const message=document.querySelector('#msg'),form=document.querySelector('form');
+async function verify(type,token,password){
+  const response=await fetch('/.netlify/identity/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type,token,password})});
+  if(!response.ok)throw Error();
+  return response.json();
+}
+if(invite||recovery){
+  form.hidden=false;message.textContent='برای تکمیل درخواست، گذرواژهٔ خود را ثبت کنید.';
+  form.onsubmit=async event=>{
+    event.preventDefault();const password=document.querySelector('#pw').value;form.querySelector('button').disabled=true;
+    try{
+      if(invite)await verify('signup',invite,password);
+      else{const session=await verify('recovery',recovery);const resp=await fetch('/.netlify/identity/user',{method:'PUT',headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'},body:JSON.stringify({password})});if(!resp.ok)throw Error();}
+      form.reset();form.hidden=true;message.textContent='گذرواژه ثبت شد. اکنون وارد میز نشر شوید.';
+    }catch{message.textContent='درخواست کامل نشد. اعتبار پیوند را بررسی کنید.';}finally{form.querySelector('button').disabled=false;}
+  };
+}else if(confirm){try{await verify('signup',confirm);message.textContent='ایمیل تأیید شد.';}catch{message.textContent='تأیید انجام نشد. پیوند دیگری درخواست کنید.';}}
+else message.textContent='با پیوند دعوت یا بازیابی ایمیل وارد این صفحه شوید.';
+</script></body></html>
