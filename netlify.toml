@@ -1,10 +1,16 @@
 [build]
-  command = "vite build"
-  publish = "dist/client"
+command = "vite build"
+publish = "dist/client"
+
 [build.environment]
-  NODE_VERSION = "24"
+NODE_VERSION = "24"
+PNPM_FLAGS = "--no-frozen-lockfile"
+
 [dev]
-  framework = "#custom"
-  command = "npm run dev"
-  targetPort = 3000
-  port = 8888
+framework = "#custom"
+command = "npm run dev"
+targetPort = 3000
+port = 8888
+
+[functions]
+node_bundler = "esbuild"
